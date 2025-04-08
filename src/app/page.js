@@ -1,103 +1,162 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useEffect, useState } from "react";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import SteelProductionChart from "@/components/SteelProductionChart";
+import SteelProductionTable from "@/components/SteelProductionTable";
+import SteelProductionPieChart from "@/components/SteelProductionPieChart";
+import SteelProductionBarChart from "@/components/SteelProductionBarChart";
+import HeroSection from "@/components/HeroSection";
+import EmissionsMapChart from "@/components/EmissionsMapChart";
+
+ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+
+export default function DashboardPage() {
+  const [emissionData, setEmissionData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchEmissions = async () => {
+      try {
+        const response = await fetch("/api/emissions");
+        if (!response.ok) {
+          throw new Error("Failed to fetch emissions data");
+        }
+        const data = await response.json();
+        setEmissionData(data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchEmissions();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="p-6 text-center text-gray-600">
+        Loading environmental data...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6 text-center text-red-600">
+        <p>Error: {error}</p>
+      </div>
+    );
+  }
+
+  // Prepare data for the chart
+  const chartData = {
+    labels: emissionData?.map((item) => item.activity),
+    datasets: [
+      {
+        label: "kg CO₂e per activity",
+        data: emissionData?.map((item) => item.co2e),
+        backgroundColor: "#3b82f6",
+      },
+    ],
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <>
+      <HeroSection />
+      <div className="p-6 space-y-8 mx-8">
+        <div
+          data-aos="fade-up"
+          className="text-justify w-full flex flex-col items-center"
+        >
+          <p className="text-gray-700 px-4 mt-2 my-1 w-full">
+            Steel production is one of the largest contributors to global CO₂
+            emissions. This dashboard analyzes the top steel-producing countries
+            based on 2023 data, highlighting steel’s journey from post-war
+            expansion to today’s powerhouse producers.
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+        <div className="flex lg:flex-row sm:flex-col w-full ">
+          <div
+            className="lg:w-1/2 sm:w-full m-4 bg-white rounded-2xl shadow p-4 border"
+            data-aos="fade-right"
+          >
+            <SteelProductionChart />
+          </div>
+          <div
+            className="lg:w-1/2 sm:w-full m-4 bg-white rounded-2xl shadow p-4 border"
+            data-aos="fade-left"
+          >
+            {/* <SteelProductionTable /> */}
+            <SteelProductionPieChart />
+          </div>
+        </div>
+        <p className="text-gray-500 w-full px-4">
+          While global output surged—especially post-2000 with China&lsquo;s
+          rise—2023&lsquo;s snapshot reveals China, India, and a few others
+          dominating the scene, reflecting shifting industrial priorities and
+          global influence.
+        </p>
+
+        <div className="flex lg:flex-row sm:flex-col w-full ">
+          <div
+            className="lg:w-1/2 sm:w-full m-4 bg-white rounded-2xl shadow p-4 border"
+            data-aos="fade-right"
+          >
+            <SteelProductionTable />
+          </div>
+          <div
+            className="lg:w-1/2 sm:w-full m-4 bg-white rounded-2xl shadow p-4 border"
+            data-aos="fade-left"
+          >
+            <SteelProductionBarChart />
+          </div>
+        </div>
+        <p className="text-gray-500 w-full px-4">
+          This section highlights the top 10 steel-producing companies shaping
+          global output. The bar chart reveals just how concentrated the
+          industry is, with giants—mostly from China and India—dominating the
+          landscape.
+        </p>
+
+        <EmissionsMapChart />
+
+        {/* Summary Cards */}
+        {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {emissionData?.slice(0, 3).map((item, index) => (
+            <div key={index} className="bg-white rounded-2xl shadow p-4 border">
+              <p className="text-sm text-gray-500">
+                {item.year ? item.year : ""} {item.activity} Emissions
+              </p>
+              <p className="text-xl font-semibold my-1 text-blue-800">
+                {item.co2e} Tonnes CO₂e
+              </p>
+              <p className="text-xs text-gray-400">
+                Emission Factor: {item.emission_factor_name}
+              </p>
+            </div>
+          ))}
+        </div> */}
+
+        {/* Bar Chart */}
+        {/* <div className="bg-white rounded-2xl p-6 shadow border">
+          <h2 className="text-lg font-semibold text-gray-700 mb-4">
+            Emissions per Activity
+          </h2>
+          <Bar data={chartData} />
+        </div> */}
+      </div>
+    </>
   );
 }
