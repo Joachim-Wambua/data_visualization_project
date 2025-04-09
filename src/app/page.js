@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   BarElement,
@@ -31,6 +30,12 @@ export default function DashboardPage() {
   const [emissionData, setEmissionData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isClient, setIsClient] = useState(false);
+
+  // Ensure we are in a client-side environment
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     const fetchEmissions = async () => {
@@ -48,8 +53,14 @@ export default function DashboardPage() {
       }
     };
 
-    fetchEmissions();
-  }, []);
+    if (isClient) {
+      fetchEmissions();
+    }
+  }, [isClient]);
+
+  if (!isClient) {
+    return null; // Return null to prevent rendering server-side
+  }
 
   if (loading) {
     return (
@@ -106,7 +117,6 @@ export default function DashboardPage() {
             className="lg:w-1/2 sm:w-full m-4 bg-white rounded-2xl shadow p-4 border"
             data-aos="fade-left"
           >
-            {/* <SteelProductionTable /> */}
             <SteelProductionPieChart />
           </div>
         </div>
@@ -139,12 +149,9 @@ export default function DashboardPage() {
         </p>
 
         <div className="flex flex-col items-center justify-center my-8 bg-white rounded-2xl shadow p-4 border">
-          {/* Title */}
           <h2 className="text-2xl font-bold text-gray-800 mb-4">
             Active Low-Carbon Projects in the Steel Industry
           </h2>
-
-          {/* Description */}
           <p className="text-gray-600 text-center mb-6">
             This map highlights the locations of active low-carbon projects that
             have been announced within the steel industry. It provides insight
@@ -152,31 +159,7 @@ export default function DashboardPage() {
             regions where these innovative projects are being implemented to
             transform the future of steel production.
           </p>
-
-          {/* Map */}
-          {/* <div className=""> */}
-          {/* <WorldEmissionsMap
-              geoData={geoData}
-              numData={countriesData}
-              width={1200}
-              height={800}
-              className="relative"
-            /> */}
-
           <ActiveProjectsMap data={steelActiveProjects} />
-          {/* Professional reference */}
-          {/* <p className="absolute bottom-2 right-2 text-sm text-gray-500 italic">
-              Data provided by{" "}
-              <a
-                href="https://climatetrace.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500"
-              >
-                Climate Trace
-              </a>
-            </p> */}
-          {/* </div> */}
         </div>
 
         <div className="flex lg:flex-row sm:flex-col w-full ">
@@ -188,8 +171,6 @@ export default function DashboardPage() {
               Technologies Used in Active Low-Carbon Projects in the Steel
               Industry
             </h2>
-
-            {/* Description */}
             <p className="text-gray-600 mb-6">
               This chart shows the distribution of technologies used in active
               low-carbon steel projects, highlighting innovations that reduce
@@ -197,19 +178,7 @@ export default function DashboardPage() {
             </p>
             <ProjectsChart data={steelActiveProjects} />
           </div>
-          <div
-            className="lg:w-1/2 sm:w-full m-4 bg-white rounded-2xl shadow p-4 border"
-            data-aos="fade-left"
-          >
-            {/* <ActiveProjectsTable data={steelActiveProjects} /> */}
-          </div>
         </div>
-        {/* <div
-          className="w-full font-sans m-4 bg-white rounded-2xl shadow p-4 border"
-          data-aos="fade-left"
-        >
-          <CompanySteelProduction data={steelCompaniesData} />
-        </div> */}
 
         <div
           className="w-full font-sans m-4 bg-white rounded-2xl shadow p-4 border"
@@ -227,30 +196,6 @@ export default function DashboardPage() {
           </div>
           <WorldEmissionsMap />
         </div>
-        {/* Summary Cards */}
-        {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          {emissionData?.slice(0, 3).map((item, index) => (
-            <div key={index} className="bg-white rounded-2xl shadow p-4 border">
-              <p className="text-sm text-gray-500">
-                {item.year ? item.year : ""} {item.activity} Emissions
-              </p>
-              <p className="text-xl font-semibold my-1 text-blue-800">
-                {item.co2e} Tonnes CO₂e
-              </p>
-              <p className="text-xs text-gray-400">
-                Emission Factor: {item.emission_factor_name}
-              </p>
-            </div>
-          ))}
-        </div> */}
-
-        {/* Bar Chart */}
-        {/* <div className="bg-white rounded-2xl p-6 shadow border">
-          <h2 className="text-lg font-semibold text-gray-700 mb-4">
-            Emissions per Activity
-          </h2>
-          <Bar data={chartData} />
-        </div> */}
       </div>
     </>
   );
