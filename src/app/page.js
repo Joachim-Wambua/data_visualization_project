@@ -19,10 +19,15 @@ import SteelProductionTable from "@/components/SteelProductionTable";
 import SteelProductionPieChart from "@/components/SteelProductionPieChart";
 import SteelProductionBarChart from "@/components/SteelProductionBarChart";
 import HeroSection from "@/components/HeroSection";
-import WorldEmissionsMap from "@/components/WorldEmissionsMap";
 import ProjectsChart from "@/components/ProjectsChart";
-import ActiveProjectsMap from "@/components/ActiveProjectsMap";
 import CompanySteelProduction from "@/components/CompanySteelProduction";
+
+// Dynamically import the map components
+import dynamic from "next/dynamic";
+
+// Dynamically load maps with SSR disabled
+const WorldEmissionsMap = dynamic(() => import("@/components/WorldEmissionsMap"), { ssr: false });
+const ActiveProjectsMap = dynamic(() => import("@/components/ActiveProjectsMap"), { ssr: false });
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
