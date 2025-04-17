@@ -4,7 +4,7 @@ const CompanyEmissions = () => {
   return (
     <div className="w-full h-[600px] bg-white rounded-lg shadow-md overflow-hidden">
       <iframe
-        src="http://localhost:8000/api/steel-bar-chart"
+        src="https://steelwatch-data.onrender.com/api/steel-bar-chart"
         width="100%"
         height="100%"
         style={{ border: "none" }}

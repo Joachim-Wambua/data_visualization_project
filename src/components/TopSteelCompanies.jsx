@@ -4,7 +4,7 @@ const TopSteelCompanies = () => {
   return (
     <div className="w-full h-[600px] bg-white rounded-lg shadow-md overflow-hidden">
       <iframe
-        src="http://localhost:8000/api/steel-map-chart"
+        src="https://steelwatch-data.onrender.com/api/steel-map-chart"
         width="100%"
         height="100%"
         style={{ border: "none" }}

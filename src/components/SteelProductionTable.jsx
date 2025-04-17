@@ -28,7 +28,7 @@ const SteelProductionTable = () => {
     // </div>
     <div className="w-full h-full flex items-center justify-center bg-white rounded-lg shadow-md overflow-hidden">
       <iframe
-        src="http://localhost:8000/api/steel-companies-table"
+        src="https://steelwatch-data.onrender.com/api/steel-companies-table"
         width="150%"
         height="100%"
         style={{ border: "none" }}

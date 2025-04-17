@@ -2,7 +2,7 @@ export default function EmissionsCloropleth() {
     return (
       <div className="w-full h-[600px] bg-white rounded-lg shadow-md overflow-hidden">
         <iframe
-          src="http://localhost:8000/api/emissions-map"
+          src="https://steelwatch-data.onrender.com/api/emissions-map"
           width="100%"
           height="100%"
           style={{ border: "none" }}
