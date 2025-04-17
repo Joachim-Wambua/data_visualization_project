@@ -25,7 +25,7 @@ const ProjectsChart = ({ data }) => {
         <YAxis />
         <Tooltip />
         <Legend />
-        <Bar dataKey="number_of_projects" fill="#74cbcb" />
+        <Bar dataKey="number_of_projects" fill="#009b9d" />
       </BarChart>
     </ResponsiveContainer>
   );

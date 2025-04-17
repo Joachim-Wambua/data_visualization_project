@@ -44,7 +44,7 @@ const SteelProductionBarChart = () => {
             <YAxis />
             <Tooltip formatter={(value) => `${value} Mt`} />
             <Legend />
-            <Bar dataKey="production" fill="#74cbcb" />
+            <Bar dataKey="production" fill="#009b9d" />
           </BarChart>
         </ResponsiveContainer>
       </div>

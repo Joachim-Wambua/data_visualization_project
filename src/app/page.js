@@ -24,6 +24,10 @@ import CompanySteelProduction from "@/components/CompanySteelProduction";
 
 // Dynamically import the map components
 import dynamic from "next/dynamic";
+import InteractiveChart from "@/components/InteractiveChart";
+import EmissionsCloropleth from "@/components/EmissionsCloropleth";
+import CompanyEmissions from "@/components/CompanyEmissions";
+import TopSteelCompanies from "@/components/TopSteelCompanies";
 
 // Dynamically load maps with SSR disabled
 const WorldEmissionsMap = dynamic(() => import("@/components/WorldEmissionsMap"), { ssr: false });
@@ -143,7 +147,9 @@ export default function DashboardPage() {
             className="lg:w-1/2 sm:w-full m-4 bg-white rounded-2xl shadow p-4 border"
             data-aos="fade-left"
           >
-            <SteelProductionBarChart />
+            {/* <SteelProductionBarChart /> */}
+            <CompanyEmissions />
+          
           </div>
         </div>
         <p className="text-gray-500 font-sans w-full px-4">
@@ -183,6 +189,13 @@ export default function DashboardPage() {
             </p>
             <ProjectsChart data={steelActiveProjects} />
           </div>
+
+          <div
+            className="lg:w-1/2 sm:w-full m-4 bg-white rounded-2xl shadow p-4 border"
+            data-aos="fade-left"
+          >
+            <TopSteelCompanies />
+          </div>
         </div>
 
         <div
@@ -199,7 +212,9 @@ export default function DashboardPage() {
               environmental impact of steel production globally.
             </p>
           </div>
-          <WorldEmissionsMap />
+          {/* <WorldEmissionsMap /> */}
+          <EmissionsCloropleth />
+          <InteractiveChart />
         </div>
       </div>
     </>

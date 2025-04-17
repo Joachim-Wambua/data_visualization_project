@@ -40,7 +40,7 @@ const SteelProductionChart = () => {
             dataKey="world_crude_steel_production_million_tonnes"
             stroke="#4bc0c0"
             strokeWidth={2}
-            fill="#4bc0c0"
+            fill="#009b9d"
             dot={false}
             name="World Steel Production"
           />
